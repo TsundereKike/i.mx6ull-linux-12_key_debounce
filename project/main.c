@@ -7,6 +7,7 @@
 #include "bsp_int.h"
 #include "bsp_exti.h"
 #include "bsp_epit.h"
+static unsigned char led_state = OFF;
 int main(void)
 {
     int_init();
@@ -16,9 +17,11 @@ int main(void)
     beep_init();
     key_init();
     exti_init();
-    epit1_init(0,33000000);/*初始化定时器1,1分频66MHz,定时时间为500ms*/
+    epit1_init(0,66000000/100);/*初始化定时器1,1分频66MHz,定时时间为10ms,用于按键消抖*/
     while(1)
     {
+        led_state = !led_state;
+        led_switch(LED0, led_state);
         delay_ms(500);
     }
     return 0;

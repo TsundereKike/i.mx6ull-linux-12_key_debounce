@@ -4,5 +4,11 @@
 			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"files.associations": {
+			"bsp_epit.h": "c",
+			"bsp_gpio.h": "c",
+			"bsp_exti.h": "c"
+		}
+	}
 }

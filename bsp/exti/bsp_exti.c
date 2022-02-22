@@ -3,6 +3,7 @@
 #include "bsp_int.h"
 #include "bsp_delay.h"
 #include "bsp_beep.h"
+#include "bsp_epit.h"
 void exti_init(void)
 {
     gpio_pin_config_t gpio_config;
@@ -18,15 +19,9 @@ void exti_init(void)
     system_register_irqhandler(GPIO1_Combined_16_31_IRQn, (system_irq_handler_t)GPIO1_IO18_irqhandler, NULL);
     gpio_enable_int(GPIO1, 18);
 }
-void GPIO1_IO18_irqhandler(void)
+void GPIO1_IO18_irqhandler(unsigned int gicciar,void *param)
 {
-    static unsigned char beep_state = 0;
-    delay_ms(10);
-    if(gpio_pin_read(GPIO1, 18)==0)
-    {
-        beep_state = !beep_state;
-        beep_switch(beep_state);
-    }
+    epit1_restart(66000000/100);/*重启定时器用于按键消抖*/
     /*清除中断标志位*/
     gpio_clear_int_flags(GPIO1, 18);
 }
